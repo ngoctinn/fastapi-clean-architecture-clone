@@ -16,7 +16,7 @@ class Todo(Base):
     __tablename__= 'todos'
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    user_id = Column(UUID(as_uuid=True), ForeignKey('user.id'), nullable=False )
+    user_id = Column(UUID(as_uuid=True), ForeignKey('users.id'), nullable=False )
     description = Column(String, nullable=False)
     due_date = Column(DateTime, nullable=True)
     is_completed = Column(Boolean, nullable=False, default=False)
