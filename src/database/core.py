@@ -1,7 +1,6 @@
-from typing import Annotated
+from sqlmodel import create_engine, Session, SQLModel
+from typing import Generator, Annotated
 from fastapi import Depends
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, Session, declarative_base
 import os
 from dotenv import load_dotenv
 
@@ -13,17 +12,13 @@ DATABASE_URL = "sqlite:///./todosapp.db"
 
 # DATABASE_URL="postgresql://postgres:postgres@db:5432/cleanfastapi"
 
-engine = create_engine(DATABASE_URL)
+engine = create_engine(DATABASE_URL, echo=True)
 
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+def create_db_and_tables():
+    SQLModel.metadata.create_all(engine)
 
-Base = declarative_base()
+def get_session() -> Generator[Session, None, None]:
+    with Session(engine) as session:
+        yield session
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-DbSession = Annotated[Session, Depends(get_db)]
+DbSession = Annotated[Session, Depends(get_session)]
