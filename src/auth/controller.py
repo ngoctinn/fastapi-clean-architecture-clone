@@ -1,6 +1,7 @@
 from typing import Annotated
 from fastapi import APIRouter, Depends, Request
 from starlette import status
+from src.users.schemas import UserReadWithRoles
 from . import  schemas
 from . import service
 from fastapi.security import OAuth2PasswordRequestForm
@@ -12,10 +13,10 @@ router = APIRouter(
     tags=['auth']
 )
 
-@router.post("/", status_code=status.HTTP_201_CREATED)
+@router.post("/register", status_code=status.HTTP_201_CREATED, response_model=UserReadWithRoles)
 @limiter.limit("5/hour")
 async def register_user(request: Request, db: DbSession, register_user_request: schemas.RegisterUserRequest):
-    service.register_user(db, register_user_request)
+    return service.register_user(db, register_user_request)
 
 @router.post("/token", response_model=schemas.Token)
 async def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], db: DbSession):

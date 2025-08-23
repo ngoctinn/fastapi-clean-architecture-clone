@@ -1,12 +1,12 @@
 from uuid import UUID
 from sqlalchemy.orm import Session
 from . import schemas
-from src.models.user import User
+from src.models.rbac import User
 from src.exceptions import UserNotFoundError, InvalidPasswordError, PasswordMismatchError
 from src.auth.service import verify_password, get_password_hash
 import logging
 
-def get_user_by_id(db: Session, user_id: UUID) -> schemas.UserResponse:
+def get_user_by_id(db: Session, user_id: UUID) -> schemas.UserBase:
     user= db.query(User).filter(User.id == user_id).first()
     if not user:
         logging.warning(f"User not found with ID: {user_id}")
