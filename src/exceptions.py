@@ -11,6 +11,8 @@ class TodoError(HTTPException):
 class UserError(HTTPException):
     """Base exception for user-related errors"""
 
+    pass
+
 
 class UserNotFoundError(UserError):
     def __init__(self, user_id=None):

@@ -3,6 +3,7 @@ from typing import List
 from .service import get_current_user
 from .schemas import TokenData
 
+
 class RoleChecker:
     def __init__(self, allowed_roles: List[str]):
         self.allowed_roles = allowed_roles
@@ -11,9 +12,9 @@ class RoleChecker:
         if not user_data.roles:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
-                detail="User has no roles assigned."
+                detail="User has no roles assigned.",
             )
-        
+
         # Kiểm tra nếu user có vai trò 'admin' thì cho phép mọi quyền
         if "admin" in user_data.roles:
             return
@@ -24,5 +25,5 @@ class RoleChecker:
         if not is_allowed:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
-                detail=f"You do not have the required permissions. Allowed roles: {', '.join(self.allowed_roles)}"
+                detail=f"You do not have the required permissions. Allowed roles: {', '.join(self.allowed_roles)}",
             )

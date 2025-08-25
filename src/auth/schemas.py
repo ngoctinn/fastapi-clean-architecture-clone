@@ -1,6 +1,9 @@
 import uuid
 from pydantic import BaseModel, EmailStr
-from typing import List, Optional
+from typing import List
+
+from src.exceptions import AuthenticationError
+
 
 class RegisterUserRequest(BaseModel):
     email: EmailStr
@@ -8,15 +11,18 @@ class RegisterUserRequest(BaseModel):
     last_name: str
     password: str
 
+
 class Token(BaseModel):
     access_token: str
     token_type: str
-    
+
+
 class TokenData(BaseModel):
     user_id: str | None = None
     roles: List[str] = []
 
-    def get_uuid(self) ->Optional[uuid.UUID]:
+    def get_uuid(self) -> uuid.UUID:
         if self.user_id:
             return uuid.UUID(self.user_id)
-        return None
+        raise AuthenticationError("User ID not found in token_type")
+
