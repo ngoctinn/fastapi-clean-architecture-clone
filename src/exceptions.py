@@ -11,8 +11,6 @@ class TodoError(HTTPException):
 class UserError(HTTPException):
     """Base exception for user-related errors"""
 
-    pass
-
 
 class UserNotFoundError(UserError):
     def __init__(self, user_id=None):
@@ -35,4 +33,3 @@ class InvalidPasswordError(UserError):
 class AuthenticationError(HTTPException):
     def __init__(self, message: str = "Could not validate user"):
         super().__init__(status_code=401, detail=message)
-

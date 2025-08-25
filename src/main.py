@@ -20,7 +20,7 @@ def create_initial_roles():
         for role_data in roles_to_create:
             statement = select(Role).where(Role.name == role_data["name"])
             if not session.exec(statement).first():
-                role = Role(**role_data)
+                role = Role(**role_data)  # type: ignore
                 session.add(role)
 
         session.commit()
@@ -40,4 +40,3 @@ configure_logging(LogLevels.info)
 app = FastAPI(lifespan=lifespan)
 
 register_routes(app)
-
